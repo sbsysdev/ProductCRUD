@@ -3,10 +3,7 @@ using ProductCRUD.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Web;
-using System.Web.Http.Tracing;
 using System.Web.Mvc;
 
 namespace ProductCRUD.Controllers
@@ -22,8 +19,6 @@ namespace ProductCRUD.Controllers
             List<Category> categories = null;
 
             if (ds == null) return View(categories);
-
-            Debug.WriteLine(ds.Tables[0].Rows[0][3]);
 
             categories = ds.Tables[0].AsEnumerable().Select(row => new Category {
                 Id = row.Field<int>(0),
