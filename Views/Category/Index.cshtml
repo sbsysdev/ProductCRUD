@@ -1,0 +1,55 @@
+﻿<main class="p-4">
+    <h1>Categories</h1>
+
+    <table class="table table-dark table-sm table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+
+                <th>Name</th>
+
+                <th>Products</th>
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var category in @Model)
+            {
+                <tr data-bind="@category">
+                    <td>@category</td>
+
+                    <td>Electronics</td>
+
+                    <td>23</td>
+
+                    <td>
+                        <div class="d-grid gap-2" style="grid-template-columns: repeat(3, 1fr); max-width: 16rem;">
+                            <button id="delete-@category" type="button" class="btn btn-danger btn-sm">Delete</button>
+
+                            <a href="/Category/Edit/@category" class="btn btn-warning btn-sm">Edit</a>
+
+                            <a href="/Category/Details/@category" class="btn btn-success btn-sm">Details</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</main>
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            var categories = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+
+            categories.map(category => {
+                $(`#delete-${category}`).click(() => {
+                    console.log(`Click on DELETE category "${category}"`)
+                });
+            });
+        });
+    </script>
+}
