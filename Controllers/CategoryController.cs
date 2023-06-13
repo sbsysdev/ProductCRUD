@@ -1,5 +1,9 @@
-﻿using System;
+﻿using ProductCRUD.Data;
+using ProductCRUD.Models;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Http.Tracing;
@@ -13,7 +17,20 @@ namespace ProductCRUD.Controllers
         {
             ViewBag.Title = "Categories";
 
-            int[] categories = { 1, 2, 3 };
+            Connection connection = new Connection();
+            DataSet ds = connection.Query("sp_read_all_category");
+            List<Category> categories = null;
+
+            if (ds == null) return View(categories);
+
+            Debug.WriteLine(ds.Tables[0].Rows[0][3]);
+
+            categories = ds.Tables[0].AsEnumerable().Select(row => new Category {
+                Id = row.Field<int>(0),
+                Name = row.Field<string>(1),
+                Products = row.Field<int>(2),
+                Created = row.Field<DateTime>(3),
+            }).ToList();
 
             return View(categories);
         }
