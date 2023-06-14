@@ -20,7 +20,7 @@ product_created DATETIME NOT NULL DEFAULT GETDATE(),
 
 -- Stored Procedures
 GO
--- Category Stored Procedure
+-- Category Stored Procedures
 CREATE PROCEDURE sp_create_category
 @category_name VARCHAR(32)
 AS
@@ -62,6 +62,14 @@ CREATE PROCEDURE sp_delete_category_by_id
 @category_id int
 AS
 DELETE FROM categories WHERE category_id = @category_id;
+
+GO
+
+-- Product Stored Procedures
+CREATE PROCEDURE sp_read_product_category_by_id
+@category_id int
+AS
+SELECT * FROM products WHERE category_id = @category_id;
 
 GO
 

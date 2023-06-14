@@ -1,3 +1,55 @@
-﻿<main class="p-4">
-    <h1>Category Detail @Model</h1>
+﻿@model  (ProductCRUD.Models.Category Category, List<ProductCRUD.Models.Product> Products)
+
+<main class="d-flex flex-column p-4">
+    @if (@Model.Category != null)
+    {
+        <h1>@Model.Category.Name details</h1>
+
+        <a href="/Category/Edit/@Model.Category.Id" class="btn btn-warning btn-sm align-self-start">Edit</a>
+
+        <span>Category created since: @Model.Category.Created</span>
+
+        <span>Products amount: @Model.Category.Products</span>
+
+        if (@Model.Products != null)
+        {
+            <table class="table table-primary table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+
+                        <th>Name</th>
+
+                        <th>Price</th>
+
+                        <th>Stock</th>
+
+                        <th>Created</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var product in @Model.Products)
+                    {
+                        <tr>
+                            <td>@product.Id</td>
+
+                            <td>@product.Name</td>
+
+                            <td>@product.Price</td>
+
+                            <td>@product.Stock</td>
+
+                            <td>@product.Created</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+
+    @if (@Model.Category == null)
+    {
+        <span>No category! 404</span>
+    }
 </main>
