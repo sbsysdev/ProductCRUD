@@ -31,6 +31,13 @@ namespace ProductCRUD.Controllers
             return View(categories);
         }
 
+        public ActionResult Create()
+        {
+            ViewBag.Title = "Create category";
+
+            return View();
+        }
+
         public ActionResult Details(int id)
         {
             ViewBag.Title = "Category Detail";

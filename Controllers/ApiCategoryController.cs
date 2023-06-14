@@ -1,16 +1,12 @@
 ﻿using ProductCRUD.Data;
 using ProductCRUD.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Management;
 
 namespace ProductCRUD.Controllers
 {
@@ -29,13 +25,27 @@ namespace ProductCRUD.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody] string value)
+        [ResponseType(typeof(void))]
+        public IHttpActionResult Post([FromBody] Category category)
         {
+            if (category == null || category.Name.Length == 0) return BadRequest("Please, type a valid category name!");
+
+            Connection connection = new Connection();
+
+            Param categoryNameParam = new Param { Key = "category_name", Value = category.Name };
+
+            bool created = connection.Command("sp_create_category", new List<Param> { categoryNameParam });
+
+            Debug.WriteLine(created);
+
+            if (!created) return StatusCode(HttpStatusCode.Conflict);
+
+            return Created("", new {});
         }
 
         // PUT api/<controller>/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(int id, [FromBody] Category category)
+        public IHttpActionResult Put(int id, [FromBody] Category category)
         {
             if (category == null || category.Name.Length == 0) return BadRequest("Please, type a valid category name!");
 

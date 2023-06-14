@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace ProductCRUD.Data
 {
@@ -53,13 +54,13 @@ namespace ProductCRUD.Data
                     }
                 }
 
-                int rows = cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
-                return rows > 0;
+                return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
 
                 return false;
             }
