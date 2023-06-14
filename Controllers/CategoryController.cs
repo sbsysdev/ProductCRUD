@@ -80,9 +80,34 @@ namespace ProductCRUD.Controllers
         }
 
         public ActionResult Edit(int id) {
-            ViewBag.Title = "Category Edit";
+            ViewBag.Title = "Edit Category";
 
-            return View(id);
+            Category category = null;
+
+            Param categoryIdParam = new Param
+            {
+                Key = "category_id",
+                Value = id
+            };
+
+            Connection connection = new Connection();
+
+            // Category detail
+            DataSet categoryDS = connection.Query("sp_read_category_by_id", new List<Param> { categoryIdParam });
+
+            if (categoryDS == null || categoryDS.Tables[0].AsEnumerable().Count() != 1) return View(category);
+
+            category = categoryDS.Tables[0].AsEnumerable().Select(row => new Category
+            {
+                Id = row.Field<int>(0),
+                Name = row.Field<string>(1),
+                Products = row.Field<int>(2),
+                Created = row.Field<DateTime>(3),
+            }).ElementAt(0);
+
+            ViewBag.Title = $"Edit {category.Name}";
+
+            return View(category);
         }
     }
 }

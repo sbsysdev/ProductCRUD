@@ -1,3 +1,63 @@
-﻿<main class="p-4">
-    <h1>Category Edit @Model</h1>
+﻿@model  ProductCRUD.Models.Category
+
+<main class="d-flex flex-column p-4">
+    @if (@Model != null)
+    {
+        <h1>Edit @Model.Name</h1>
+
+        <span>Category created since: @Model.Created</span>
+
+        <span>Products in category: @Model.Products</span>
+
+        <form class="mt-4 d-flex flex-column gap-4 align-items-start" id="edit">
+            <fieldset class="d-flex flex-column">
+                <label for="name">Category name</label>
+
+                <input id="name" name="name" type="text" placeholder="Type category name" value="@Model.Name" autocomplete="off" />
+            </fieldset>
+
+            <div>
+                <button id="cancel" type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+
+                <button type="submit" class="btn btn-warning btn-sm">Update</button>
+            </div>
+        </form>
+    }
+
+    @if (@Model == null)
+    {
+        <span>No category! 404</span>
+    }
 </main>
+
+@section scripts
+{
+    <script>
+        $(document).ready(() => {
+            $('#edit').on('submit', event => {
+                event.preventDefault();
+
+                const body = {
+                    name: event.target.name.value,
+                };
+
+                $.ajax({
+                    url: '/api/ApiCategory/@Model.Id',
+                    data: JSON.stringify(body),
+                    dataType: 'json',
+                    method: 'PUT',
+                    contentType: 'application/json; charset=utf-8',
+                    async: true,
+                    success: _ => {
+                        location.replace('@Url.Action("Details", "Category", new { id = Model.Id })');
+                    },
+                    error: err => {
+                        alert(JSON.stringify(err.responseJSON));
+                    },
+                });
+            });
+
+            $('#cancel').click(_ => history.back());
+        });
+    </script>
+}

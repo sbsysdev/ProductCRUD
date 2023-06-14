@@ -3,13 +3,15 @@
 <main class="d-flex flex-column p-4">
     @if (@Model.Category != null)
     {
+        <a href="/" class="btn btn-primary btn-sm align-self-start">Return to all categories</a>
+
         <h1>@Model.Category.Name details</h1>
 
         <a href="/Category/Edit/@Model.Category.Id" class="btn btn-warning btn-sm align-self-start">Edit</a>
 
         <span>Category created since: @Model.Category.Created</span>
 
-        <span>Products amount: @Model.Category.Products</span>
+        <span>Products in category: @Model.Category.Products</span>
 
         if (@Model.Products != null)
         {
