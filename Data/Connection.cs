@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -9,9 +10,9 @@ namespace ProductCRUD.Data
     {
         protected SqlConnection _connection;
 
-        protected void Connect(string dbHost="127.0.0.1,1433", string dbName="db_products", string dbUser="sa", string dbPass="Lamisma123*")
+        protected void Connect()
         {
-            string connectionStr = $"Data Source={dbHost};Initial Catalog={dbName}; User ID = {dbUser}; Password = {dbPass}";
+            string connectionStr = ConfigurationManager.ConnectionStrings["db_products"].ConnectionString;
             
             try
             {
