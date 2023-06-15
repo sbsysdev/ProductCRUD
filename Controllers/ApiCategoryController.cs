@@ -12,18 +12,6 @@ namespace ProductCRUD.Controllers
 {
     public class ApiCategoryController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<controller>
         [ResponseType(typeof(void))]
         public IHttpActionResult Post([FromBody] Category category)
@@ -35,8 +23,6 @@ namespace ProductCRUD.Controllers
             Param categoryNameParam = new Param { Key = "category_name", Value = category.Name };
 
             bool created = connection.Command("sp_create_category", new List<Param> { categoryNameParam });
-
-            Debug.WriteLine(created);
 
             if (!created) return StatusCode(HttpStatusCode.Conflict);
 
@@ -69,8 +55,24 @@ namespace ProductCRUD.Controllers
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        [ResponseType(typeof(void))]
+        public IHttpActionResult Delete(int id)
         {
+            Connection connection = new Connection();
+
+            // Find category
+            Param categoryIdParam = new Param { Key = "category_id", Value = id };
+
+            DataSet categoryDS = connection.Query("sp_read_category_by_id", new List<Param> { categoryIdParam });
+
+            if (categoryDS == null || categoryDS.Tables[0].AsEnumerable().Count() != 1) return NotFound();
+
+            // delete category
+            bool deleted = connection.Command("sp_delete_category_by_id", new List<Param> { categoryIdParam });
+
+            if (!deleted) return StatusCode(HttpStatusCode.Conflict);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }

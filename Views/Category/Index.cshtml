@@ -25,7 +25,7 @@
             {
                 foreach (var category in @Model)
                 {
-                    <tr>
+                    <tr id="category-@category.Id">
                         <td>@category.Id</td>
 
                         <td>@category.Name</td>
@@ -58,9 +58,29 @@
 
             categories.map(category => {
                 $(`#delete-${category.Id}`).click(() => {
-                    console.log(`Click on DELETE category "${category}"`)
+                    const userResult = confirm(`Are you sure you want delete "${category.Name}"?`);
+
+                    if (!userResult) return;
+
+                    deleteCategory(category);
                 });
             });
+
+            function deleteCategory(category) {
+                $.ajax({
+                    url: `/api/ApiCategory/${category.Id}`,
+                    method: 'DELETE',
+                    contentType: 'application/json; charset=utf-8',
+                    async: true,
+                    success: _ => {
+                        $(`#category-${category.Id}`).remove();
+                        alert(`"${category.Name}" deleted!`);
+                    },
+                    error: err => {
+                        alert(JSON.stringify(err.responseJSON));
+                    },
+                });
+            }
         });
     </script>
 }
